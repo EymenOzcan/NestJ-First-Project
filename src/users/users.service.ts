@@ -1,26 +1,29 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.input';
 import { UpdateUserDto } from './dto/update-user.input';
+import { UserDocument, Users } from './entities/user.entitiy';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class UsersService {
-  private users: CreateUserDto[] = [];
+  constructor(
+    @InjectModel(Users.name) private userModel: Model<UserDocument>,
+  ) {}
   getUsers() {
-    return this.users;
+    return this.userModel.find();
   }
-  getUser(index: string) {
-    return this.users[index];
+  getUser(id: string) {
+    return this.userModel.findById(id);
   }
   createUser(createUserDto: CreateUserDto) {
-    this.users.push(createUserDto);
-    return `${createUserDto.username} ${createUserDto.email} Kullanıcısı Eklendi`;
+    const createdUser = new this.userModel(createUserDto);
+    return createdUser.save();
   }
-  updateUser(index: string, updateUserDto: UpdateUserDto) {
-    this.users[index] = updateUserDto;
-    return 'Kullanıcı Güncellendi';
+  updateUser(id: string, updateUserDto: UpdateUserDto) {
+    return this.userModel.findByIdAndUpdate(id, updateUserDto, { new: true });
   }
-  deleteUser(index: number) {
-    this.users.splice(index, 1);
-    return 'Kullanıcı Silindi';
+  deleteUser(id: string) {
+    return this.userModel.findByIdAndDelete(id);
   }
 }

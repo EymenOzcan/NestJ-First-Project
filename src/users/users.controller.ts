@@ -18,20 +18,20 @@ export class UsersController {
   findAll() {
     return this.usersService.getUsers();
   }
-  @Get(':index')
-  findOne(@Param('index') index: string) {
-    return this.usersService.getUser(index);
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.usersService.getUser(id);
   }
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.createUser(createUserDto);
   }
-  @Put(':index')
-  update(@Param('index') index: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.updateUser(index, updateUserDto);
+  @Put(':id')
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.updateUser(id, updateUserDto);
   }
-  @Delete(':index')
-  delete(@Param('index') index: number) {
-    return this.usersService.deleteUser(index);
+  @Delete(':id')
+  delete(@Param('id') id: string) {
+    return this.usersService.deleteUser(id);
   }
 }

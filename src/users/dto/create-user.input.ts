@@ -1,10 +1,11 @@
-import { IsEmail, IsNotEmpty, IsString, IsOptional } from 'class-validator';
+import { IsEmail, IsString, MinLength } from 'class-validator';
 
 export class CreateUserDto {
   @IsString()
-  @IsOptional()
+  @MinLength(3, {
+    message: 'Kullanıcı adı en az 3 karakter olmalıdır',
+  })
   username: string;
-  @IsEmail()
-  @IsNotEmpty()
+  @IsEmail({}, { message: 'Geçersiz email adresi giriniz' })
   email: string;
 }
